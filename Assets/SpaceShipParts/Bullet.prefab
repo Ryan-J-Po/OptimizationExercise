@@ -230,7 +230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 1
-  _lifeTime: 10
+  _lifeTime: 3
   _destroyOnHit: 1
   _explosion: {fileID: 5376455531186091334, guid: 99d2dd9857c98634c88e34e7b6c6fd20, type: 3}
 --- !u!54 &7077495878396946217

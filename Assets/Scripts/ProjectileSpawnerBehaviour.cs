@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ObjectPool;
 
 public class ProjectileSpawnerBehaviour : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class ProjectileSpawnerBehaviour : MonoBehaviour
     private float _projectileSpeed;
     [SerializeField]
     private LayerMask _collisionLayers;
+    [SerializeField]
+    private Transform _projectileHolder;
 
     public LayerMask CollisionLayers { get => _collisionLayers; private set => _collisionLayers = value; }
 
@@ -18,7 +21,10 @@ public class ProjectileSpawnerBehaviour : MonoBehaviour
         if (!_projectile)
             return;
 
-        ProjectileBehaviour projectile = Instantiate(_projectile, transform.position, transform.rotation);
+        GameObject projectileInstance = ObjectPoolBehaviour.Instance.GetObject(_projectile.gameObject, transform.position, transform.rotation);
+        ProjectileBehaviour projectile = projectileInstance.GetComponent<ProjectileBehaviour>();
+
+        projectileInstance.transform.parent = _projectileHolder.transform;
 
         projectile.CollisionLayers = _collisionLayers;
 

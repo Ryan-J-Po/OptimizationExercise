@@ -9,9 +9,9 @@ namespace ObjectPool
         private string _name;
         private List<GameObject> _objects;
 
-        public Pool(string name, GameObject gameObject)
+        public Pool(GameObject gameObject)
         {
-            _name = name;
+            _name = gameObject.name;
             _objects = new List<GameObject>();
             _objects.Add(gameObject);
         }
@@ -27,6 +27,11 @@ namespace ObjectPool
             { 
                 return _objects.Count; 
             } 
+        }
+
+        public bool Contains(GameObject objectInstance)
+        {
+            return _objects.Contains(objectInstance);
         }
 
         public GameObject GetObject()
