@@ -24,6 +24,7 @@ public class ProjectileSpawnerBehaviour : MonoBehaviour
         GameObject projectileInstance = ObjectPoolBehaviour.Instance.GetObject(_projectile.gameObject, transform.position, transform.rotation);
         ProjectileBehaviour projectile = projectileInstance.GetComponent<ProjectileBehaviour>();
 
+        if (_projectileHolder)
         projectileInstance.transform.parent = _projectileHolder.transform;
 
         projectile.CollisionLayers = _collisionLayers;

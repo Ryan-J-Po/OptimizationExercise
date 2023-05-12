@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public delegate void HealthEvent(HealthBehaviour owner);
 public class HealthBehaviour : MonoBehaviour
 {
     [SerializeField]
     private float _maxHealth;
     private float _health;
-    [SerializeField]
-    private GameObject _explosion;
-    [SerializeField]
-    private UnityEvent _onDeath;
+    private HealthEvent _onDeath;
+    private HealthEvent _onHit; 
 
     public float Health { get => _health; private set => _health = value; }
     public float MaxHealth { get => _maxHealth; set => _maxHealth = value; }
+
+    public void AddOnDeathListener(HealthEvent listener)
+    {
+        _onDeath += listener;
+    }
+
+    public void AddOnHitListener(HealthEvent listener)
+    {
+        _onHit += listener;
+    }
 
     public void Start()
     {
@@ -24,16 +33,19 @@ public class HealthBehaviour : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _health -= damage;
+        if (_onHit != null)
+        {
+            _onHit.Invoke(this);
+        }
 
         if (_health <= 0)
         {
             _health = 0;
-            _onDeath?.Invoke();
 
-            GameObject explosionInstance = Instantiate(_explosion, transform.position, _explosion.transform.rotation);
+            if(_onDeath != null)
+            _onDeath.Invoke(this);
 
-            ScreenShakeBehaviour.ShakeScreen();
-            Destroy(explosionInstance, 1f);
+            GameManagerBehaviour.SpawnExplosion(this);
             Destroy(gameObject);
         }
     }
